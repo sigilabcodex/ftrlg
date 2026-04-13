@@ -7,15 +7,15 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.16;
+  opacity: 0.14;
   background-image:
     radial-gradient(circle at 50% 38%, transparent 0%, rgba(4, 10, 9, 0.22) 66%, rgba(0, 0, 0, 0.36) 100%),
     repeating-linear-gradient(
       180deg,
-      rgba(199, 255, 223, 0.04) 0,
-      rgba(199, 255, 223, 0.04) 1px,
-      rgba(0, 0, 0, 0.015) 1px,
-      rgba(0, 0, 0, 0.015) 3px
+      rgba(199, 255, 223, 0.03) 0,
+      rgba(199, 255, 223, 0.03) 1px,
+      rgba(0, 0, 0, 0.014) 1px,
+      rgba(0, 0, 0, 0.014) 3px
     );
 }
 
@@ -29,7 +29,7 @@
 }
 
 .screen::before {
-  background: linear-gradient(90deg, rgba(130, 185, 156, 0.012), rgba(132, 178, 205, 0.008));
+  background: linear-gradient(90deg, rgba(130, 185, 156, 0.01), rgba(132, 178, 205, 0.006));
   mix-blend-mode: screen;
 }
 
@@ -39,26 +39,26 @@
 }
 
 body[data-flicker='on'] .crt-overlay {
-  animation: crt-flicker 9s infinite;
+  animation: crt-flicker 11s infinite;
 }
 
 @keyframes crt-flicker {
   0%,
   12%,
   100% {
-    opacity: 0.16;
-  }
-
-  12.2% {
     opacity: 0.14;
   }
 
+  12.2% {
+    opacity: 0.125;
+  }
+
   55% {
-    opacity: 0.165;
+    opacity: 0.146;
   }
 
   55.3% {
-    opacity: 0.145;
+    opacity: 0.127;
   }
 }
 
@@ -83,10 +83,10 @@ input {
 }
 
 .ftrlg-logo {
-  width: min(220px, 42vw);
-  min-height: 24px;
-  margin: 0 0 0.9rem;
-  opacity: 0.8;
+  width: min(152px, 35vw);
+  min-height: 16px;
+  margin: 0;
+  opacity: 0.56;
 }
 
 .ftrlg-logo.is-disabled,
@@ -98,19 +98,19 @@ input {
   display: block;
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 0 4px rgba(100, 158, 131, 0.2));
+  filter: drop-shadow(0 0 4px rgba(100, 158, 131, 0.16));
 }
 
 .pixel-bird {
   position: fixed;
-  right: clamp(8px, 2vw, 20px);
-  bottom: clamp(8px, 2vw, 16px);
-  width: 24px;
-  height: 20px;
-  opacity: 0.34;
+  right: clamp(8px, 2vw, 16px);
+  bottom: clamp(8px, 2vw, 12px);
+  width: 14px;
+  height: 12px;
+  opacity: 0.27;
   pointer-events: none;
   z-index: 1;
-  color: #9cbdaf;
+  color: color-mix(in srgb, #9cbdaf 78%, #d2e4de);
 }
 
 .pixel-bird svg {
@@ -120,12 +120,12 @@ input {
 }
 
 .pixel-bird .wing {
-  animation: bird-flap 0.24s steps(1, end) infinite;
-  transform-origin: 12px 10px;
+  animation: bird-flap 0.2s steps(1, end) infinite;
+  transform-origin: 7px 6px;
 }
 
 .pixel-bird .wing-b {
-  animation-delay: 0.12s;
+  animation-delay: 0.1s;
 }
 
 @keyframes bird-flap {
@@ -142,11 +142,11 @@ input {
 
 @media (max-width: 640px) {
   .ftrlg-logo {
-    width: min(190px, 54vw);
+    width: min(126px, 42vw);
   }
 
   .pixel-bird {
-    opacity: 0.26;
+    opacity: 0.2;
     right: 6px;
     bottom: 6px;
   }
