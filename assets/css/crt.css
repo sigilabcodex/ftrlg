@@ -7,26 +7,35 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.14;
+  opacity: 0.16;
   background-image:
-    radial-gradient(circle at 50% 35%, transparent 0%, rgba(2, 7, 6, 0.18) 62%, rgba(0, 0, 0, 0.34) 100%),
+    radial-gradient(circle at 50% 38%, transparent 0%, rgba(4, 10, 9, 0.22) 66%, rgba(0, 0, 0, 0.36) 100%),
     repeating-linear-gradient(
       180deg,
-      rgba(199, 255, 223, 0.045) 0,
-      rgba(199, 255, 223, 0.045) 1px,
-      rgba(0, 0, 0, 0.02) 1px,
-      rgba(0, 0, 0, 0.02) 3px
+      rgba(199, 255, 223, 0.04) 0,
+      rgba(199, 255, 223, 0.04) 1px,
+      rgba(0, 0, 0, 0.015) 1px,
+      rgba(0, 0, 0, 0.015) 3px
     );
 }
 
+.screen::before,
 .screen::after {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background: radial-gradient(circle at 50% 50%, transparent 48%, rgba(0, 0, 0, 0.16) 100%);
-  opacity: 0.65;
+}
+
+.screen::before {
+  background: linear-gradient(90deg, rgba(130, 185, 156, 0.012), rgba(132, 178, 205, 0.008));
+  mix-blend-mode: screen;
+}
+
+.screen::after {
+  background: radial-gradient(circle at 50% 50%, transparent 48%, rgba(0, 0, 0, 0.18) 100%);
+  opacity: 0.68;
 }
 
 body[data-flicker='on'] .crt-overlay {
@@ -37,24 +46,29 @@ body[data-flicker='on'] .crt-overlay {
   0%,
   12%,
   100% {
-    opacity: 0.14;
+    opacity: 0.16;
   }
 
   12.2% {
-    opacity: 0.12;
+    opacity: 0.14;
   }
 
   55% {
-    opacity: 0.145;
+    opacity: 0.165;
   }
 
   55.3% {
-    opacity: 0.13;
+    opacity: 0.145;
   }
 }
 
 body.no-crt .crt-overlay,
+body.no-crt .screen::before,
 body.no-crt .screen::after {
+  display: none;
+}
+
+body.no-vignette .screen::after {
   display: none;
 }
 
@@ -72,7 +86,12 @@ input {
   width: min(220px, 42vw);
   min-height: 24px;
   margin: 0 0 0.9rem;
-  opacity: 0.78;
+  opacity: 0.8;
+}
+
+.ftrlg-logo.is-disabled,
+.ftrlg-logo.is-missing {
+  opacity: 0;
 }
 
 .ftrlg-logo img {
@@ -88,9 +107,10 @@ input {
   bottom: clamp(8px, 2vw, 16px);
   width: 24px;
   height: 20px;
-  opacity: 0.36;
+  opacity: 0.34;
   pointer-events: none;
   z-index: 1;
+  color: #9cbdaf;
 }
 
 .pixel-bird svg {
@@ -99,25 +119,24 @@ input {
   image-rendering: pixelated;
 }
 
-.pixel-bird .wing-a,
-.pixel-bird .wing-b {
-  animation: bird-flap 0.14s steps(1, end) infinite;
+.pixel-bird .wing {
+  animation: bird-flap 0.24s steps(1, end) infinite;
   transform-origin: 12px 10px;
 }
 
 .pixel-bird .wing-b {
-  animation-delay: 0.07s;
+  animation-delay: 0.12s;
 }
 
 @keyframes bird-flap {
   0%,
-  48% {
+  49% {
     opacity: 1;
   }
 
   50%,
   100% {
-    opacity: 0.62;
+    opacity: 0.6;
   }
 }
 
@@ -127,7 +146,7 @@ input {
   }
 
   .pixel-bird {
-    opacity: 0.28;
+    opacity: 0.26;
     right: 6px;
     bottom: 6px;
   }

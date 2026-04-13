@@ -1,26 +1,55 @@
 (() => {
   const visualConfig = window.FTRLG_CONFIG?.visual ?? {};
+  const audioConfig = window.FTRLG_CONFIG?.audio ?? {};
+
   const useCrt = visualConfig.crt !== false;
+  const useVignette = visualConfig.vignette !== false;
+  const useFlicker = visualConfig.flicker !== false;
+  const useLogo = visualConfig.logo !== false;
   const useBird = visualConfig.bird !== false;
-  const useSound = visualConfig.sound === true;
+  const useSound = audioConfig.enabled === true || visualConfig.sound === true;
 
   if (!useCrt) {
     document.body.classList.add('no-crt');
-  } else {
+  }
+
+  if (!useVignette) {
+    document.body.classList.add('no-vignette');
+  }
+
+  if (useCrt && useFlicker) {
     document.body.dataset.flicker = 'on';
   }
 
   const logoHost = document.querySelector('.ftrlg-logo');
   if (logoHost) {
-    const logoImg = new Image();
-    logoImg.src = 'assets/img/ftrlg.svg';
-    logoImg.alt = 'FTRLG';
-    logoImg.loading = 'lazy';
-    logoImg.decoding = 'async';
-    logoImg.addEventListener('error', () => {
-      logoHost.remove();
-    });
-    logoHost.append(logoImg);
+    if (!useLogo) {
+      logoHost.classList.add('is-disabled');
+    } else {
+      const logoImg = new Image();
+      const candidates = ['assets/img/ftrlg-logo.svg', 'assets/img/ftrlg.svg'];
+      let index = 0;
+
+      const tryNext = () => {
+        if (index >= candidates.length) {
+          logoHost.classList.add('is-missing');
+          return;
+        }
+        logoImg.src = candidates[index];
+        index += 1;
+      };
+
+      logoImg.alt = 'FTRLG';
+      logoImg.loading = 'lazy';
+      logoImg.decoding = 'async';
+      logoImg.addEventListener('load', () => {
+        logoHost.classList.remove('is-missing');
+      });
+      logoImg.addEventListener('error', tryNext);
+
+      tryNext();
+      logoHost.append(logoImg);
+    }
   }
 
   if (useBird) {
@@ -29,16 +58,16 @@
     bird.setAttribute('aria-hidden', 'true');
     bird.innerHTML = `
       <svg viewBox="0 0 24 20" xmlns="http://www.w3.org/2000/svg" focusable="false">
-        <rect x="7" y="9" width="8" height="5" fill="#9cbdaf" opacity="0.95" />
-        <rect x="15" y="10" width="3" height="2" fill="#9cbdaf" />
-        <rect x="6" y="10" width="1" height="1" fill="#9cbdaf" />
-        <g class="wing-a">
-          <rect x="9" y="6" width="3" height="2" fill="#9cbdaf" />
-          <rect x="11" y="7" width="2" height="2" fill="#9cbdaf" />
+        <rect x="7" y="9" width="8" height="5" fill="currentColor" opacity="0.96" />
+        <rect x="15" y="10" width="3" height="2" fill="currentColor" />
+        <rect x="6" y="10" width="1" height="1" fill="currentColor" />
+        <g class="wing wing-a">
+          <rect x="9" y="6" width="3" height="2" fill="currentColor" />
+          <rect x="11" y="7" width="2" height="2" fill="currentColor" />
         </g>
-        <g class="wing-b">
-          <rect x="9" y="7" width="3" height="2" fill="#9cbdaf" />
-          <rect x="11" y="8" width="2" height="2" fill="#9cbdaf" />
+        <g class="wing wing-b">
+          <rect x="9" y="7" width="3" height="2" fill="currentColor" />
+          <rect x="11" y="8" width="2" height="2" fill="currentColor" />
         </g>
       </svg>`;
     document.body.append(bird);
@@ -49,29 +78,47 @@
   }
 
   let audioContext;
-  const ensureAudioContext = () => {
+  let userActivated = false;
+
+  const unlockAudio = () => {
+    userActivated = true;
     if (!audioContext) {
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
     }
     if (audioContext.state === 'suspended') {
       audioContext.resume();
     }
-    return audioContext;
   };
 
+  const activationEvents = ['pointerdown', 'keydown', 'touchstart'];
+  activationEvents.forEach((eventName) => {
+    window.addEventListener(eventName, unlockAudio, { once: true, passive: true });
+  });
+
   const playTone = ({ frequency = 440, duration = 0.06, type = 'square', gain = 0.012 }) => {
-    const ctx = ensureAudioContext();
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
+    if (!userActivated) {
+      return;
+    }
+
+    if (!audioContext) {
+      unlockAudio();
+    }
+
+    if (!audioContext) {
+      return;
+    }
+
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
 
     oscillator.type = type;
     oscillator.frequency.value = frequency;
     gainNode.gain.value = gain;
 
     oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
+    gainNode.connect(audioContext.destination);
 
-    const now = ctx.currentTime;
+    const now = audioContext.currentTime;
     gainNode.gain.setValueAtTime(gain, now);
     gainNode.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
