@@ -17,7 +17,12 @@ window.FTRLG_CONFIG = {
   },
   visual: {
     crt: true,
-    bird: true,
-    sound: false
+    vignette: true,
+    flicker: true,
+    logo: true,
+    bird: true
+  },
+  audio: {
+    enabled: false
   }
 };

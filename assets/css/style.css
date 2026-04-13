@@ -80,6 +80,21 @@ h1 span {
   font-size: 0.82rem;
 }
 
+
+.access-panel .ftrlg-logo {
+  margin-top: 0.5rem;
+}
+
+.dossier-intro {
+  display: grid;
+  gap: 0.55rem;
+  align-items: start;
+}
+
+.dossier-intro .ftrlg-logo {
+  margin-bottom: 0.25rem;
+}
+
 .access-form {
   display: grid;
   gap: 0.72rem;
@@ -165,12 +180,12 @@ button:hover {
 
 .dossier-intro h1 {
   font-size: clamp(1.2rem, 2.9vw, 1.7rem);
-  margin-top: 0;
+  margin: 0;
 }
 
 .dossier-intro p {
   color: var(--accent);
-  margin-bottom: 0;
+  margin: 0;
 }
 
 .payload-content {

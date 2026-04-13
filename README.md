@@ -38,6 +38,8 @@ Current keys include:
 - sessionStorage keys (`granted`, `name`, `pendingCode`)
 - access code value and redirect delay
 - PBKDF2 iteration count
+- visual toggles (`visual.crt`, `visual.vignette`, `visual.flicker`, `visual.logo`, `visual.bird`)
+- optional UI audio toggle (`audio.enabled`, off by default)
 
 ## Stored payload format
 
