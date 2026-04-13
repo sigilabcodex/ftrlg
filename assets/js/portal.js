@@ -86,12 +86,14 @@
       sessionStorage.removeItem(storageKeys.pendingCode);
       payloadSlot.innerHTML = contentHtml;
       payloadSlot.setAttribute('aria-busy', 'false');
+      window.dispatchEvent(new CustomEvent('ftrlg:decrypt-success'));
     })
     .catch(() => {
       sessionStorage.removeItem(storageKeys.pendingCode);
       sessionStorage.removeItem(storageKeys.granted);
       payloadSlot.innerHTML = '<p>Access key invalid. Dossier unavailable.</p>';
       payloadSlot.setAttribute('aria-busy', 'false');
+      window.dispatchEvent(new CustomEvent('ftrlg:decrypt-fail'));
     });
 
   exitButton.addEventListener('click', () => {

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 72" role="img" aria-label="FTRLG logo">
+  <rect width="420" height="72" fill="none"/>
+  <g fill="#9cbdaf" font-family="monospace" font-size="44" letter-spacing="2">
+    <text x="4" y="50">FTRLG</text>
+  </g>
+  <path d="M8 58h220" stroke="#9cbdaf" stroke-width="2" opacity="0.45"/>
+</svg>

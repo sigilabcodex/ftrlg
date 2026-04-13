@@ -40,6 +40,8 @@
       return;
     }
 
+    window.dispatchEvent(new CustomEvent('ftrlg:access-submit'));
+
     sessionStorage.setItem(storageKeys.name, participantName);
     sessionStorage.setItem(storageKeys.pendingCode, submittedCode);
     sessionStorage.removeItem(storageKeys.granted);

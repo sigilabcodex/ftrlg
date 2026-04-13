@@ -14,5 +14,10 @@ window.FTRLG_CONFIG = {
   },
   crypto: {
     pbkdf2Iterations: 150000
+  },
+  visual: {
+    crt: true,
+    bird: true,
+    sound: false
   }
 };
