@@ -34,15 +34,6 @@ body {
   padding: 2rem 1rem;
 }
 
-.crt-overlay {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.01) 1px, transparent 1px, transparent 3px);
-  background-size: 100% 3px;
-  opacity: 0.08;
-}
-
 .panel {
   width: min(100%, 860px);
   border: 1px solid var(--line);

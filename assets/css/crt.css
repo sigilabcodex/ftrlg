@@ -1,0 +1,134 @@
+.screen {
+  isolation: isolate;
+}
+
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.14;
+  background-image:
+    radial-gradient(circle at 50% 35%, transparent 0%, rgba(2, 7, 6, 0.18) 62%, rgba(0, 0, 0, 0.34) 100%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(199, 255, 223, 0.045) 0,
+      rgba(199, 255, 223, 0.045) 1px,
+      rgba(0, 0, 0, 0.02) 1px,
+      rgba(0, 0, 0, 0.02) 3px
+    );
+}
+
+.screen::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 48%, rgba(0, 0, 0, 0.16) 100%);
+  opacity: 0.65;
+}
+
+body[data-flicker='on'] .crt-overlay {
+  animation: crt-flicker 9s infinite;
+}
+
+@keyframes crt-flicker {
+  0%,
+  12%,
+  100% {
+    opacity: 0.14;
+  }
+
+  12.2% {
+    opacity: 0.12;
+  }
+
+  55% {
+    opacity: 0.145;
+  }
+
+  55.3% {
+    opacity: 0.13;
+  }
+}
+
+body.no-crt .crt-overlay,
+body.no-crt .screen::after {
+  display: none;
+}
+
+h1,
+.subtitle,
+.status-line,
+.payload-content,
+label,
+button,
+input {
+  text-shadow: 0 0 5px rgba(115, 165, 141, 0.18);
+}
+
+.ftrlg-logo {
+  width: min(220px, 42vw);
+  min-height: 24px;
+  margin: 0 0 0.9rem;
+  opacity: 0.78;
+}
+
+.ftrlg-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 4px rgba(100, 158, 131, 0.2));
+}
+
+.pixel-bird {
+  position: fixed;
+  right: clamp(8px, 2vw, 20px);
+  bottom: clamp(8px, 2vw, 16px);
+  width: 24px;
+  height: 20px;
+  opacity: 0.36;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.pixel-bird svg {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.pixel-bird .wing-a,
+.pixel-bird .wing-b {
+  animation: bird-flap 0.14s steps(1, end) infinite;
+  transform-origin: 12px 10px;
+}
+
+.pixel-bird .wing-b {
+  animation-delay: 0.07s;
+}
+
+@keyframes bird-flap {
+  0%,
+  48% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0.62;
+  }
+}
+
+@media (max-width: 640px) {
+  .ftrlg-logo {
+    width: min(190px, 54vw);
+  }
+
+  .pixel-bird {
+    opacity: 0.28;
+    right: 6px;
+    bottom: 6px;
+  }
+}
