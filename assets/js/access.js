@@ -2,12 +2,12 @@
   const config = window.FTRLG_CONFIG;
   const fallbackStorageKeys = {
     granted: 'ftrlg_access_granted',
-    name: 'ftrlg_participant_name'
+    name: 'ftrlg_participant_name',
+    pendingCode: 'ftrlg_pending_code'
   };
 
   const storageKeys = config?.storageKeys ?? fallbackStorageKeys;
   const routes = config?.routes ?? { portal: 'portal.html' };
-  const accessCode = config?.access?.code ?? '';
   const redirectDelayMs = config?.access?.redirectDelayMs ?? 320;
 
   const form = document.getElementById('access-form');
@@ -24,9 +24,9 @@
     feedback.dataset.state = state;
   };
 
-  if (sessionStorage.getItem(storageKeys.granted) === 'true') {
-    window.location.replace(routes.portal);
-    return;
+  const storedName = sessionStorage.getItem(storageKeys.name);
+  if (storedName) {
+    nameInput.value = storedName;
   }
 
   form.addEventListener('submit', (event) => {
@@ -40,23 +40,13 @@
       return;
     }
 
-    if (!accessCode) {
-      setFeedback('Node configuration fault. Access channel unavailable.', 'error');
-      return;
-    }
+    sessionStorage.setItem(storageKeys.name, participantName);
+    sessionStorage.setItem(storageKeys.pendingCode, submittedCode);
+    sessionStorage.removeItem(storageKeys.granted);
 
-    if (submittedCode === accessCode) {
-      sessionStorage.setItem(storageKeys.granted, 'true');
-      sessionStorage.setItem(storageKeys.name, participantName);
-      setFeedback('Credential pair accepted. Routing to dossier…', 'ok');
-      window.setTimeout(() => {
-        window.location.assign(routes.portal);
-      }, redirectDelayMs);
-      return;
-    }
-
-    setFeedback('Authorization mismatch. Access denied.', 'error');
-    codeInput.value = '';
-    codeInput.focus();
+    setFeedback('Credential pair accepted. Routing to dossier…', 'ok');
+    window.setTimeout(() => {
+      window.location.assign(routes.portal);
+    }, redirectDelayMs);
   });
 })();

@@ -1,4 +1,4 @@
-# FUTUROLOGÍA / ftrlg access node (v1)
+# FUTUROLOGÍA / ftrlg access node (v2)
 
 Lightweight static portal site for FUTUROLOGÍA (ftrlg), designed for GitHub Pages deployment.
 
@@ -6,80 +6,107 @@ Lightweight static portal site for FUTUROLOGÍA (ftrlg), designed for GitHub Pag
 
 This repository contains a minimal two-page experiential interface:
 - `index.html`: access node (participant designation + node code gate)
-- `portal.html`: internal dossier view rendered only after session access is granted
+- `portal.html`: internal dossier view rendered after successful client-side decryption
 
 The tone is intentionally restrained: internal network terminal + dossier aesthetics, with responsive layout and subtle visual texture.
 
-## How it works
+## Runtime flow
 
-### Access flow
-1. User enters participant designation and node code on `index.html`.
-2. `assets/js/access.js` validates both fields.
-3. If code matches the configured value, it stores session state in `sessionStorage` and redirects to `portal.html`.
-4. `assets/js/portal.js` checks the session gate. If missing, it redirects back to `index.html`.
-5. Portal greets the participant by stored name and injects decoded document content.
+1. On `index.html`, user enters participant designation and node code.
+2. `assets/js/access.js` validates only that both fields are present.
+3. Access script stores:
+   - participant name (`sessionStorage`)
+   - temporary entered code (`sessionStorage`, transient)
+4. User is redirected to `portal.html`.
+5. `assets/js/portal.js` derives a key from the temporary code using PBKDF2 and decrypts `assets/data/payload.js` via AES-GCM.
+6. If decrypt succeeds:
+   - payload renders
+   - `granted=true` is stored
+   - temporary code is immediately removed from `sessionStorage`
+7. If decrypt fails:
+   - temporary code is removed
+   - access denied message is shown
 
-### Shared config
+## Shared config
+
 Common configuration is centralized in:
 
 - `assets/js/config.js`
 
 Current keys include:
 - route names (`index.html`, `portal.html`)
-- `sessionStorage` keys
-- access-code value and redirect delay
+- sessionStorage keys (`granted`, `name`, `pendingCode`)
+- access code value and redirect delay
+- PBKDF2 iteration count
 
-### Session storage keys
-- `ftrlg_access_granted`
-- `ftrlg_participant_name`
+## Stored payload format
 
-## How to change the access code
-
-Edit the access code value in:
-
-- `assets/js/config.js`
-
-Current default:
+`assets/data/payload.js` now stores encrypted payload metadata only:
 
 ```js
-access: {
-  code: 'ftrlg-prelim-2026'
-}
+window.FTRLG_PAYLOAD = {
+  algorithm: 'aes-gcm-pbkdf2-v1',
+  kdf: { name: 'PBKDF2', hash: 'SHA-256', iterations: 150000 },
+  cipher: 'AES-GCM',
+  salt: '<base64>',
+  iv: '<base64>',
+  ciphertext: '<base64>'
+};
 ```
 
-## How to change the document payload
+No plaintext document body is committed in the public repository.
 
-The invitation body is stored obfuscated in:
+## Regenerating encrypted payload
 
-- `assets/data/payload.js`
+1. Create a local (git-ignored) plaintext source file:
+   - `.local/payload-source.html`
+2. Run:
 
-`portal.js` decodes this payload client-side and injects it into `#payload-content`.
+```bash
+node scripts/encrypt-payload.js
+```
 
-### Current obfuscation method
+This script:
+- reads source from stdin if provided, otherwise `.local/payload-source.html`
+- reads access code from `assets/js/config.js` (or `--code`)
+- encrypts with AES-256-GCM
+- derives key with PBKDF2-SHA256 (`150000` iterations by default)
+- writes updated `assets/data/payload.js`
 
-Algorithm: `xor-base64-v1`
+Optional flags:
 
-- Start with document HTML string.
-- XOR each character with a numeric shift (`shift` field in payload file).
-- Base64-encode the transformed string.
-- Save as `encoded` in `payload.js`.
+```bash
+node scripts/encrypt-payload.js --source .local/payload-source.html --out assets/data/payload.js --iterations 150000
+```
 
-Decode path in browser:
-- Base64 decode with `atob`
-- XOR again with same shift
+## Changing the access code
 
-## Obfuscation limitations (important)
+1. Update `access.code` in `assets/js/config.js`.
+2. Re-run payload encryption so ciphertext matches the new code:
 
-This is intentionally lightweight obfuscation, not secure encryption:
-- anyone with browser devtools can inspect and decode payload
-- access code is client-side and discoverable
-- session gate is only a ritual/access layer for casual visitors
+```bash
+node scripts/encrypt-payload.js
+```
 
-For stronger protection in future versions, use server-side controls or Web Crypto with externally managed keys.
+If code and ciphertext do not match, portal decryption will fail.
+
+## Security expectations and limitations
+
+This is stronger than lightweight obfuscation, but still frontend-only security:
+- all logic executes client-side
+- access code is still shipped to browser if kept in config
+- determined attackers can inspect runtime behavior
+
+What this improves:
+- plaintext payload is not readable in repo files
+- wrong code fails cryptographic decryption
+- access gate is tied to decryption success, not a simple string compare in the entry page
+
+For high-assurance protection, use server-side authorization and key management.
 
 ## Local testing
 
-Because this is static HTML/CSS/JS, you can test quickly with:
+Because this is static HTML/CSS/JS, test with:
 
 ```bash
 python -m http.server 8080
@@ -99,18 +126,3 @@ Then open:
    - Branch: `main` (or your chosen branch), folder `/ (root)`
 4. Save and wait for Pages deployment.
 5. Your site will be served from `https://<user>.github.io/<repo>/`.
-
-## Map custom domain later (`ftrlg.cc`)
-
-When ready:
-1. In GitHub Pages settings, set custom domain to `ftrlg.cc`.
-2. Add DNS records at your domain provider:
-   - `A` records for apex domain pointing to GitHub Pages IPs
-   - or `CNAME` for subdomain setup
-3. Add a `CNAME` file at repository root containing exactly:
-
-```text
-ftrlg.cc
-```
-
-4. Enable HTTPS in Pages settings after DNS propagates.

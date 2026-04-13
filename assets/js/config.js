@@ -5,10 +5,14 @@ window.FTRLG_CONFIG = {
   },
   storageKeys: {
     granted: 'ftrlg_access_granted',
-    name: 'ftrlg_participant_name'
+    name: 'ftrlg_participant_name',
+    pendingCode: 'ftrlg_pending_code'
   },
   access: {
     code: 'ftrlg-prelim-2026',
     redirectDelayMs: 320
+  },
+  crypto: {
+    pbkdf2Iterations: 150000
   }
 };
