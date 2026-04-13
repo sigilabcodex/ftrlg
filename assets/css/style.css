@@ -1,0 +1,218 @@
+:root {
+  --bg: #060909;
+  --panel: #0c1212;
+  --line: #2d4541;
+  --text: #d2e4de;
+  --muted: #90aca3;
+  --accent: #9cbdaf;
+  --danger: #d1a29c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: radial-gradient(circle at top, #0c1413 0%, var(--bg) 45%, #040505 100%);
+  color: var(--text);
+  font-family: "IBM Plex Mono", "Cascadia Mono", "Consolas", "Courier New", monospace;
+  letter-spacing: 0.01em;
+}
+
+.screen {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+}
+
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.01) 1px, transparent 1px, transparent 3px);
+  background-size: 100% 3px;
+  opacity: 0.12;
+}
+
+.panel {
+  width: min(100%, 860px);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 85%, transparent);
+  backdrop-filter: blur(1.5px);
+  box-shadow: 0 0 0 1px #111c1a inset, 0 0 45px rgba(60, 113, 93, 0.08);
+  position: relative;
+  z-index: 1;
+}
+
+.access-panel {
+  max-width: 560px;
+  padding: 2rem;
+}
+
+.eyebrow,
+.subtitle,
+.status-line,
+.dossier-header span {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+  font-weight: 600;
+}
+
+h1 span {
+  color: var(--accent);
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-top: 0.6rem;
+  margin-bottom: 1.8rem;
+  font-size: 0.85rem;
+}
+
+.access-form {
+  display: grid;
+  gap: 0.7rem;
+}
+
+label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+input,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+input {
+  background: #0a100f;
+  border: 1px solid var(--line);
+  padding: 0.72rem 0.78rem;
+}
+
+input:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button {
+  margin-top: 0.7rem;
+  border: 1px solid var(--line);
+  background: #121a18;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease;
+}
+
+button:hover {
+  border-color: var(--accent);
+  background: #16201d;
+}
+
+.status-line {
+  margin-top: 1rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.status-line[data-state="error"] {
+  color: var(--danger);
+}
+
+.status-line[data-state="ok"] {
+  color: var(--accent);
+}
+
+.dossier {
+  padding: 1.2rem;
+  display: grid;
+  gap: 1.4rem;
+}
+
+.dossier-header {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.8rem;
+}
+
+.dossier-header p {
+  margin: 0;
+}
+
+.dossier-header span {
+  color: var(--muted);
+  margin-right: 0.35rem;
+}
+
+.dossier-intro h1 {
+  font-size: clamp(1.2rem, 2.9vw, 1.7rem);
+}
+
+.dossier-intro p {
+  color: var(--accent);
+}
+
+.payload-content {
+  line-height: 1.65;
+  max-width: 72ch;
+}
+
+.payload-content h2 {
+  font-size: 1rem;
+  margin-top: 1.6rem;
+  margin-bottom: 0.4rem;
+  color: var(--accent);
+}
+
+.payload-content p {
+  margin-top: 0;
+}
+
+.dossier-footer {
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.dossier-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.dossier-footer a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+}
+
+.dossier-footer a:hover {
+  border-bottom-color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .access-panel,
+  .dossier {
+    padding: 1.2rem;
+  }
+}

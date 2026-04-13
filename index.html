@@ -1,43 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ftrlg access node</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FUTUROLOGÍA / Access Node</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body class="screen screen-access">
+    <div class="crt-overlay" aria-hidden="true"></div>
 
-<style>
-body {
-background: #000;
-color: #0f0;
-font-family: monospace;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
-margin:0;
-}
+    <main class="panel access-panel" aria-labelledby="node-title">
+      <p class="eyebrow">RESTRICTED CIRCULATION · INTERNAL NODE</p>
+      <h1 id="node-title">FUTUROLOGÍA / <span>ftrlg</span></h1>
+      <p class="subtitle">Access Node · Preliminary experiential engineering dossier</p>
 
-.box {
-border:1px solid #0f0;
-padding:30px;
-max-width:500px;
-}
-</style>
-</head>
+      <form id="access-form" class="access-form" novalidate>
+        <label for="participant-name">Participant name</label>
+        <input id="participant-name" name="participantName" type="text" autocomplete="name" required />
 
-<body>
+        <label for="access-code">Access code</label>
+        <input id="access-code" name="accessCode" type="password" autocomplete="off" required />
 
-<div class="box">
-FUTUROLOGÍA (ftrlg)
+        <button type="submit">Request entry</button>
+      </form>
 
-<br><br>
+      <p class="status-line" role="status" aria-live="polite" id="access-feedback">
+        Node idle. Awaiting credentials.
+      </p>
+    </main>
 
-ACCESS NODE INITIALIZED
-
-<br><br>
-
-Awaiting credentials…
-</div>
-
-</body>
+    <script src="assets/js/access.js" defer></script>
+  </body>
 </html>
