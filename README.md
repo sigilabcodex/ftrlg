@@ -5,19 +5,29 @@ Lightweight static portal site for FUTUROLOGÍA (ftrlg), designed for GitHub Pag
 ## What this site is
 
 This repository contains a minimal two-page experiential interface:
-- `index.html`: access node (name + access code gate)
+- `index.html`: access node (participant designation + node code gate)
 - `portal.html`: internal dossier view rendered only after session access is granted
 
-The tone is intentionally restrained: internal network terminal + dossier aesthetics, with responsive modern layout and subtle CRT texture.
+The tone is intentionally restrained: internal network terminal + dossier aesthetics, with responsive layout and subtle visual texture.
 
 ## How it works
 
 ### Access flow
-1. User enters participant name and access code on `index.html`.
+1. User enters participant designation and node code on `index.html`.
 2. `assets/js/access.js` validates both fields.
 3. If code matches the configured value, it stores session state in `sessionStorage` and redirects to `portal.html`.
 4. `assets/js/portal.js` checks the session gate. If missing, it redirects back to `index.html`.
 5. Portal greets the participant by stored name and injects decoded document content.
+
+### Shared config
+Common configuration is centralized in:
+
+- `assets/js/config.js`
+
+Current keys include:
+- route names (`index.html`, `portal.html`)
+- `sessionStorage` keys
+- access-code value and redirect delay
 
 ### Session storage keys
 - `ftrlg_access_granted`
@@ -25,14 +35,16 @@ The tone is intentionally restrained: internal network terminal + dossier aesthe
 
 ## How to change the access code
 
-Edit the `ACCESS_CODE` constant in:
+Edit the access code value in:
 
-- `assets/js/access.js`
+- `assets/js/config.js`
 
 Current default:
 
 ```js
-const ACCESS_CODE = 'ftrlg-prelim-2026';
+access: {
+  code: 'ftrlg-prelim-2026'
+}
 ```
 
 ## How to change the document payload

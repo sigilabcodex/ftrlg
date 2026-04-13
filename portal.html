@@ -9,7 +9,7 @@
   <body class="screen screen-portal">
     <div class="crt-overlay" aria-hidden="true"></div>
 
-    <main class="panel dossier" aria-live="polite">
+    <main class="panel dossier" aria-labelledby="dossier-title">
       <header class="dossier-header">
         <p><span>STATUS</span> PRELIMINARY</p>
         <p><span>ACCESS</span> LIMITED</p>
@@ -18,24 +18,25 @@
       </header>
 
       <section class="dossier-intro">
-        <h1>Internal Circular</h1>
+        <h1 id="dossier-title">Internal Circular</h1>
         <p id="visitor-greeting">Welcome, participant.</p>
       </section>
 
-      <article id="payload-content" class="payload-content">
+      <article id="payload-content" class="payload-content" aria-live="polite" aria-busy="true">
         <p>Decrypting memorandum…</p>
       </article>
 
       <footer class="dossier-footer">
         <button id="exit-node" type="button">Exit node</button>
         <nav aria-label="Future expansions">
-          <a href="#" aria-disabled="true">PDF module · pending</a>
-          <a href="#" aria-disabled="true">Response channel · pending</a>
-          <a href="#" aria-disabled="true">Alt version · pending</a>
+          <span class="pending-link" aria-disabled="true">PDF module · pending</span>
+          <span class="pending-link" aria-disabled="true">Response channel · pending</span>
+          <span class="pending-link" aria-disabled="true">Alt version · pending</span>
         </nav>
       </footer>
     </main>
 
+    <script src="assets/js/config.js" defer></script>
     <script src="assets/data/payload.js" defer></script>
     <script src="assets/js/portal.js" defer></script>
   </body>

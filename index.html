@@ -14,21 +14,22 @@
       <h1 id="node-title">FUTUROLOGÍA / <span>ftrlg</span></h1>
       <p class="subtitle">Access Node · Preliminary experiential engineering dossier</p>
 
-      <form id="access-form" class="access-form" novalidate>
-        <label for="participant-name">Participant name</label>
+      <form id="access-form" class="access-form" novalidate aria-describedby="access-feedback">
+        <label for="participant-name">Participant designation</label>
         <input id="participant-name" name="participantName" type="text" autocomplete="name" required />
 
-        <label for="access-code">Access code</label>
+        <label for="access-code">Node code</label>
         <input id="access-code" name="accessCode" type="password" autocomplete="off" required />
 
-        <button type="submit">Request entry</button>
+        <button type="submit">Request dossier access</button>
       </form>
 
       <p class="status-line" role="status" aria-live="polite" id="access-feedback">
-        Node idle. Awaiting credentials.
+        Node idle. Awaiting credential pair.
       </p>
     </main>
 
+    <script src="assets/js/config.js" defer></script>
     <script src="assets/js/access.js" defer></script>
   </body>
 </html>
